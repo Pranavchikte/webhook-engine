@@ -26,3 +26,7 @@
   worker always finds the delivery record in DB
 - Pass only IDs to Celery tasks — 
   full objects cause serialization issues
+- Single Dockerfile for both API and worker — 
+  reduces image maintenance overhead
+- Services communicate via Docker internal DNS — 
+  db:5432 not localhost:5432

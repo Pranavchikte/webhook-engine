@@ -8,12 +8,38 @@ services:
       POSTGRES_DB: webhook_db
     ports:
       - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis:7
     container_name: webhook_redis
     ports:
       - "6379:6379"
+
+  api:
+    build: .
+    container_name: webhook_api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://webhook_user:webhook_pass@db:5432/webhook_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    build: .
+    container_name: webhook_worker
+    command: celery -A app.worker.celery_app worker --loglevel=info --pool=solo
+    environment:
+      DATABASE_URL: postgresql+asyncpg://webhook_user:webhook_pass@db:5432/webhook_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
 
 volumes:
   postgres_data:
