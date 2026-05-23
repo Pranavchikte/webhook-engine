@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:15
+    container_name: webhook_db
+    environment:
+      POSTGRES_USER: webhook_user
+      POSTGRES_PASSWORD: webhook_pass
+      POSTGRES_DB: webhook_db
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:7
+    container_name: webhook_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
