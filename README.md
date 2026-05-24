@@ -5,6 +5,10 @@ Designed for reliability, scalability, and fault tolerance.
 
 ## Architecture
 
+## Architecture
+![Architecture](docs/webhook_engine_architecture.svg)
+![Delivery Lifecycle](docs/webhook_delivery_lifecycle.svg)
+
 ```
 Client → POST /events → FastAPI → PostgreSQL (delivery created PENDING)
                                         ↓
